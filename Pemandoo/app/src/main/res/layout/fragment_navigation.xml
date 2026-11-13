@@ -4,227 +4,201 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/transparent"
     tools:context=".fragment.navigation.NavigationFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_navigation"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="12dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="8dp">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cv_navigation"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            app:cardCornerRadius="0dp"
-            app:cardElevation="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_height="wrap_content"
+            android:padding="18dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_play_description"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cv_play_description"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="17dp"
-                    android:layout_marginBottom="-25dp"
-                    android:backgroundTint="@color/white"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="5dp"
-                    app:layout_constraintBottom_toTopOf="@id/iv_bottom_logo"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    android:paddingBottom="8dp">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cv_landmark_image"
+                        android:layout_width="76dp"
+                        android:layout_height="76dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
                             android:id="@+id/iv_landmark_image"
-                            android:layout_width="47dp"
-                            android:layout_height="47dp"
-                            android:layout_marginStart="14dp"
-                            android:layout_marginTop="19dp"
-                            android:src="@drawable/ic_image"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tv_landmark_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:fontFamily="@font/karla_medium"
-                            android:text="User Places"
-                            android:textSize="14dp"
-                            app:layout_constraintStart_toEndOf="@id/iv_landmark_image"
-                            app:layout_constraintTop_toTopOf="@id/iv_landmark_image"
-                            app:layout_goneMarginTop="7dp"
-                            tools:ignore="TextSizeCheck" />
-
-                        <TextView
-                            android:id="@+id/tv_landmark_range"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/karla_medium"
-                            android:text="50 m"
-                            android:textSize="12dp"
-                            app:layout_constraintStart_toStartOf="@id/tv_landmark_name"
-                            app:layout_constraintTop_toBottomOf="@id/tv_landmark_name"
-                            app:layout_goneMarginTop="3dp"
-                            tools:ignore="TextSizeCheck" />
-
-                        <TextView
-                            android:id="@+id/tv_landmark_description"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="14dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginBottom="12dp"
-                            android:fontFamily="@font/karla_bold"
-                            android:text="Mulai mendengarkan tur audio Tjong A Fie mulai dari sejarah hingga perkmbangannya saat ini."
-                            android:textColor="#666666"
-                            android:textSize="12dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/iv_landmark_image"
-                            tools:ignore="TextSizeCheck" />
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/landmark_photo"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_image" />
+                    </com.google.android.material.card.MaterialCardView>
 
+                    <TextView
+                        android:id="@+id/tv_landmark_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="42dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/karla_bold"
+                        android:maxLines="2"
+                        android:textColor="@color/calm_black"
+                        android:textSize="17sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cv_landmark_image"
+                        app:layout_constraintTop_toTopOf="@id/cv_landmark_image" />
 
-                        <androidx.appcompat.widget.AppCompatImageButton
-                            android:id="@+id/btn_play"
-                            android:layout_width="31dp"
-                            android:layout_height="36dp"
-                            android:layout_marginTop="25dp"
-                            android:layout_marginEnd="20dp"
-                            android:background="@color/transparent"
-                            android:contentDescription="Play Sound Button"
-                            android:src="@drawable/ic_play"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:ignore="TouchTargetSizeCheck" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/tv_landmark_range"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="2dp"
+                        android:fontFamily="@font/karla_medium"
+                        android:textColor="@color/text_color_grey"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="@id/tv_landmark_name"
+                        app:layout_constraintStart_toEndOf="@id/cv_landmark_image"
+                        app:layout_constraintTop_toBottomOf="@id/tv_landmark_name" />
 
-                </com.google.android.material.card.MaterialCardView>
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/btn_play"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/play_tour"
+                        android:src="@drawable/ic_play"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
+                    <TextView
+                        android:id="@+id/tv_landmark_description"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/karla_regular"
+                        android:maxLines="4"
+                        android:textColor="@color/text_color_grey"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cv_landmark_image" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                <ImageView
-                    android:id="@+id/iv_bottom_logo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/pemandoo_bottom_logo"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cv_search_tour"
-            android:layout_width="match_parent"
-            android:layout_height="179dp"
-            android:layout_marginBottom="194dp"
-            android:backgroundTint="@color/primary_yellow"
-            app:cardCornerRadius="30dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:id="@+id/action_row"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cv_play_description">
 
-                <TextView
-                    android:id="@+id/tv_search_title"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="23dp"
-                    android:fontFamily="@font/karla_bold"
-                    android:text="Mulai Tur Audio wisatamu sekarang"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/btn_panduan"
-                    android:layout_width="54dp"
-                    android:layout_height="52dp"
-                    android:layout_marginStart="88dp"
-                    android:layout_marginTop="31dp"
-                    android:background="@drawable/button_fragment_bg"
-                    android:contentDescription="Panduan Button"
-                    android:src="@drawable/ic_book"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_search_title" />
+                    <ImageButton
+                        android:id="@+id/btn_panduan"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/button_fragment_bg"
+                        android:contentDescription="@string/guide"
+                        android:src="@drawable/ic_book" />
 
-                <TextView
-                    android:id="@+id/tv_panduan"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/tv_panduan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/karla_medium"
+                        android:text="@string/guide"
+                        android:textColor="@color/calm_black"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/karla_medium"
-                    android:text="Panduan"
-                    android:textSize="14dp"
-                    app:layout_constraintEnd_toEndOf="@id/btn_panduan"
-                    app:layout_constraintStart_toStartOf="@id/btn_panduan"
-                    app:layout_constraintTop_toBottomOf="@id/btn_panduan"
-                    tools:ignore="TextSizeCheck" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/btn_tambah"
-                    android:layout_width="54dp"
-                    android:layout_height="52dp"
-                    android:background="@drawable/button_fragment_bg"
-                    android:contentDescription="Tambah Button"
-                    android:src="@drawable/ic_add"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/btn_panduan" />
+                    <ImageButton
+                        android:id="@+id/btn_tambah"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/button_fragment_bg"
+                        android:contentDescription="@string/add_landmark"
+                        android:src="@drawable/ic_add" />
 
-                <TextView
-                    android:id="@+id/tv_tambah"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/tv_tambah"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/karla_medium"
+                        android:text="@string/add_landmark"
+                        android:textColor="@color/calm_black"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/karla_medium"
-                    android:text="Tambah"
-                    android:textSize="14dp"
-                    app:layout_constraintEnd_toEndOf="@id/btn_tambah"
-                    app:layout_constraintStart_toStartOf="@id/btn_tambah"
-                    app:layout_constraintTop_toTopOf="@id/tv_panduan"
-                    tools:ignore="TextSizeCheck" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/btn_pengaturan"
-                    android:layout_width="54dp"
-                    android:layout_height="52dp"
-                    android:layout_marginEnd="88dp"
-                    android:background="@drawable/button_fragment_bg"
-                    android:contentDescription="Pengaturan Button"
-                    android:src="@drawable/ic_setting"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/btn_panduan" />
+                    <ImageButton
+                        android:id="@+id/btn_pengaturan"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/button_fragment_bg"
+                        android:contentDescription="@string/settings"
+                        android:src="@drawable/ic_setting" />
 
-                <TextView
-                    android:id="@+id/tv_pengaturan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/karla_medium"
-                    android:text="Pengaturan"
-                    android:textSize="14dp"
-                    app:layout_constraintEnd_toEndOf="@id/btn_pengaturan"
-                    app:layout_constraintStart_toStartOf="@id/btn_pengaturan"
-                    app:layout_constraintTop_toTopOf="@id/tv_panduan"
-                    tools:ignore="TextSizeCheck" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+                    <TextView
+                        android:id="@+id/tv_pengaturan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/karla_medium"
+                        android:text="@string/settings"
+                        android:textColor="@color/calm_black"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

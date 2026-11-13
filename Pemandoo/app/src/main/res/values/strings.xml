@@ -1,19 +1,123 @@
 <resources>
     <string name="app_name">Pemandoo</string>
-    <string name="test_description">
-        Tjong A Fie House is a two-storey house on Jalan Ahmad Yani in Kesawan, Medan, North Sumatra,
-        built by Tjong A Fie (1860-1921), a Hakka merchant who owned many plantation lands in Medan.
-        However, since 2009 parts of the house have been open for public visits. The house was completed in 1900 and
-        designed with Chinese, European, Malay and art-deco architectural styles and became a historical tourist attraction in Medan.
-        In this house, visitors can learn about the history of Tjong A Fie\'s life through photographs, paintings and furniture used by his family.
-        furniture used by his family and learn about Malay-Chinese culture.
-        Tjong A Fie was related to Cheong Fatt Tze who built Cheong Fatt Tze Mansion in Penang, Malaysia.
-        At first glance, there are similarities between Tjong A Fie House and Cheong Fatt Tze Mansion.
-        This museum has been included in one of the cultural heritage protected by the Ministry of Education and Culture of the Republic of Indonesia.
-        Therefore, there are many sources of information on the history and culture of the Chinese population in Medan, North Sumatra.
-    </string>
     <string name="web_client_id">805788961919-mu66uqeokerchsig84l9gr7tb31gigca.apps.googleusercontent.com</string>
+
+    <string name="login">Login</string>
+    <string name="register">Daftar</string>
+    <string name="loading">Memproses…</string>
+    <string name="saving">Menyimpan…</string>
+    <string name="sending">Mengirim…</string>
+    <string name="save">Simpan</string>
+    <string name="delete">Hapus</string>
+    <string name="back">Kembali</string>
+    <string name="email">Email</string>
+    <string name="username">Nama pengguna</string>
+    <string name="password">Kata sandi</string>
+    <string name="guest_user">Tamu</string>
+    <string name="not_signed_in">Belum masuk</string>
+    <string name="guest_mode_description">Kamu sedang menjelajah sebagai tamu</string>
+    <string name="continue_as_guest">Lanjutkan sebagai tamu</string>
+    <string name="login_to_edit_profile">Masuk untuk edit profil</string>
+    <string name="edit_profile">Edit Profil</string>
+    <string name="profile_photo">Foto profil</string>
+    <string name="join_date">Tanggal bergabung</string>
+    <string name="join_date_value">Bergabung %1$s</string>
+    <string name="join_date_unknown">Tanggal bergabung tidak tersedia</string>
+    <string name="profile_updated">Profil diperbarui.</string>
+    <string name="profile_update_failed">Gagal memperbarui profil.</string>
+    <string name="settings">Pengaturan</string>
+    <string name="tts_language">Bahasa tur audio</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+    <string name="language_english">English</string>
+    <string name="about_us">Tentang Pemandoo</string>
+    <string name="logout">Keluar</string>
+    <string name="logout_confirmation">Yakin ingin keluar dari akun ini?</string>
+    <string name="copyright">© 2024–2026 Pemandoo\nAll Rights Reserved</string>
+    <string name="version_format">Versi %1$s (build %2$d)</string>
+
+    <string name="forgot_password_title">Lupa kata sandi?</string>
+    <string name="forgot_password_info">Masukkan email akunmu. Kami akan mengirim tautan untuk membuat kata sandi baru.</string>
+    <string name="send_reset_link">Kirim tautan reset</string>
+    <string name="reset_password">Reset Kata Sandi</string>
+    <string name="reset_password_title">Buat kata sandi baru</string>
+    <string name="new_password">Kata sandi baru</string>
+    <string name="confirm_new_password">Konfirmasi kata sandi baru</string>
+    <string name="reset_email_sent_title">Email terkirim</string>
+    <string name="reset_email_sent_message">Tautan reset kata sandi telah dikirim ke %1$s. Periksa kotak masuk dan folder spam.</string>
+    <string name="password_updated">Kata sandi berhasil diperbarui.</string>
+    <string name="error_login_required">Silakan masuk terlebih dahulu.</string>
+    <string name="error_recent_login">Sesi login sudah lama. Silakan masuk ulang lalu coba lagi.</string>
+    <string name="error_invalid_credentials">Email atau kata sandi salah.</string>
+    <string name="error_user_not_found">Akun dengan email tersebut tidak ditemukan.</string>
+    <string name="error_email_in_use">Email sudah terdaftar. Gunakan email lain atau masuk.</string>
+    <string name="error_network">Tidak ada koneksi internet. Periksa jaringan lalu coba lagi.</string>
+    <string name="error_auth_generic">Terjadi kesalahan. Silakan coba lagi.</string>
+    <string name="error_google_sign_in">Google Sign-In gagal. Coba lagi atau gunakan email.</string>
+    <string name="google_sign_in_failed">Google Sign-In gagal. Coba lagi atau gunakan email.</string>
+    <string name="invalid_email">Format email tidak valid.</string>
+    <string name="password_too_short">Kata sandi minimal 6 karakter.</string>
+    <string name="username_too_short">Nama pengguna minimal 3 karakter.</string>
+    <string name="passwords_do_not_match">Konfirmasi kata sandi tidak cocok.</string>
+    <string name="registration_success">Pendaftaran berhasil.</string>
+    <string name="feature_not_available">Fitur ini belum tersedia. Gunakan Google atau mode tamu.</string>
+    <string name="auth_unavailable_title">Login cloud belum tersedia</string>
+    <string name="auth_unavailable_message">Pemandoo tidak dapat menghubungi layanan autentikasi Firebase dari build ini. Kemungkinan konfigurasi SHA-1 aplikasi belum terdaftar di Firebase Console.\n\nSemua fitur tur audio, peta, dan penyimpanan lokal tetap dapat digunakan dalam mode tamu.</string>
+
+    <string name="search_title">Temukan tur di sekitarmu</string>
+    <string name="search_subtitle">Pilih destinasi terdekat, lalu dengarkan tur audio dengan satu ketukan.</string>
+    <string name="search_loading">Mencari lokasimu dan destinasi terdekat…</string>
+    <string name="search_start">Buka Tur</string>
+    <string name="search_empty">Belum ada destinasi. Tambahkan tempat wisata terlebih dahulu.</string>
+    <string name="landmark_photo">Foto tempat wisata</string>
+    <string name="play_tour">Putar tur audio</string>
+    <string name="guide">Panduan</string>
+    <string name="add_landmark">Tambah</string>
+    <string name="no_landmark_title">Belum ada destinasi</string>
+    <string name="no_landmark_description">Tambahkan tempat wisata melalui menu Tambah agar bisa memulai tur audio.</string>
+    <string name="landmark_not_found">Destinasi tidak ditemukan.</string>
+
+    <string name="add_landmark_hint">Tambahkan destinasi baru. Isi nama dan koordinat; foto serta deskripsi membuat tur lebih menarik.</string>
+    <string name="landmark_name">Nama tempat wisata</string>
+    <string name="latitude">Latitude (contoh 3.585744)</string>
+    <string name="longitude">Longitude (contoh 98.680204)</string>
+    <string name="choose_gallery">Pilih dari galeri</string>
+    <string name="take_photo">Ambil foto</string>
+    <string name="description">Deskripsi / ringkasan</string>
+    <string name="architectural_features">Ciri arsitektur (opsional)</string>
+    <string name="interesting_facts">Fakta menarik (opsional)</string>
+    <string name="historical_significance">Nilai sejarah (opsional)</string>
+    <string name="visitor_hours">Jam buka (opsional)</string>
+    <string name="entry_fee">Harga tiket (opsional)</string>
+    <string name="geofence_radius">Radius geofence dalam meter (contoh 120)</string>
+    <string name="save_landmark">Simpan Tempat Wisata</string>
+    <string name="edit_landmark">Edit Tempat Wisata</string>
+    <string name="delete_landmark">Hapus Tempat Wisata</string>
+    <string name="landmark_saved">Tempat wisata berhasil disimpan.</string>
+    <string name="landmark_save_failed">Gagal menyimpan tempat wisata.</string>
+    <string name="delete_landmark_confirmation">Hapus \"%1$s\"? Tindakan ini tidak bisa dibatalkan.</string>
+    <string name="landmark_deleted">Tempat wisata dihapus.</string>
+    <string name="landmark_delete_failed">Gagal menghapus tempat wisata.</string>
+    <string name="required_field">Wajib diisi.</string>
+    <string name="invalid_latitude">Latitude harus antara -90 dan 90.</string>
+    <string name="invalid_longitude">Longitude harus antara -180 dan 180.</string>
+    <string name="invalid_radius">Radius harus lebih dari 0 meter.</string>
+    <string name="image_load_failed">Gagal memuat gambar.</string>
+    <string name="camera_unavailable">Kamera tidak tersedia di perangkat ini.</string>
+
+    <string name="guide_title">Panduan Pemandoo</string>
+    <string name="guide_intro">Pemandoo adalah pemandu wisata audio yang menyesuaikan diri dengan lokasimu. Ikuti langkah berikut untuk memulai.</string>
+    <string name="guide_steps">1. Izinkan akses lokasi agar Pemandoo dapat menemukan destinasi di sekitarmu.\n\n2. Di halaman utama, pilih salah satu destinasi terdekat lalu ketuk “Buka Tur”.\n\n3. Ketuk tombol putar pada kartu destinasi. Pemandoo akan membacakan narasi tempat wisata secara otomatis. Gunakan tombol putar/jeda untuk mengatur audio.\n\n4. Ketuk kartu destinasi untuk melihat detail, ciri arsitektur, fakta menarik, dan informasi kunjungan.\n\n5. Gunakan menu Tambah untuk menyimpan tempat wisata baru. Data tersimpan di perangkatmu.\n\n6. Saat kamu memasuki radius sebuah destinasi, Pemandoo mengirim notifikasi agar tur bisa segera dimulai.</string>
+    <string name="guide_note">Catatan: kualitas suara bergantung pada mesin Text-to-Speech yang tersedia di perangkat. Jika Bahasa Indonesia tidak tersedia, Pemandoo memakai bahasa bawaan perangkat. Agar notifikasi geofence tetap muncul saat aplikasi di latar belakang, pilih izin lokasi “Sepanjang waktu” di Pengaturan aplikasi.</string>
+    <string name="background_location_title">Aktifkan notifikasi lokasi</string>
+    <string name="background_location_message">Pemandoo dapat mengingatkanmu saat memasuki kawasan wisata meskipun aplikasi sedang di latar belakang. Untuk itu, pilih izin lokasi “Sepanjang waktu” di Pengaturan aplikasi.\n\nTanpa izin ini, peta dan tur audio tetap berfungsi, tetapi notifikasi geofence hanya aktif saat aplikasi dibuka.</string>
+    <string name="open_settings">Buka Pengaturan</string>
+    <string name="open_settings_failed">Tidak dapat membuka Pengaturan aplikasi.</string>
+
+    <string name="about_description">Pemandoo menghadirkan pengalaman tur audio interaktif untuk wisatawan. Dengan teknologi text-to-speech, geofence, dan peta, Pemandoo menyajikan informasi tempat wisata dalam Bahasa Indonesia dan Inggris serta merekomendasikan destinasi terdekat.</string>
+    <string name="about_team">Tim NAWASENA — GEMASTIK XVII\n\nVio Aprivia Nugraha\nPieter Tanoto\nHabel Febrian Sitanggang\n\nUniversitas Sumatera Utara\nDosen Pembimbing: Fuzy Yustika Manik, S.Kom., M.Kom.</string>
+    <string name="about_credits">Sumber foto: Wikimedia Commons. Peta: Google Maps Platform. Autentikasi: Firebase. Pemandoo dikembangkan untuk GEMASTIK XVII tahun 2024 dan diperbarui menjadi versi luring (offline-first).</string>
+
     <string name="find_place">Menemukan tempat wisata di sekitar, mohon tunggu ya..</string>
-    <string name="find_place_done">"Kami menemukan beberapa destinasi wisata terdekat"</string>
+    <string name="find_place_done">Kami menemukan beberapa destinasi wisata terdekat</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

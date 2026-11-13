@@ -1,57 +1,37 @@
 package com.nawasena.pemandoo.fragment.navigation
 
-import android.Manifest
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.LatLng
 import com.nawasena.pemandoo.GuideActivity
 import com.nawasena.pemandoo.R
-import com.nawasena.pemandoo.api.ApiConfig
-import com.nawasena.pemandoo.api.LandmarkResponseItem
 import com.nawasena.pemandoo.authentication.SettingActivity
+import com.nawasena.pemandoo.data.Landmark
 import com.nawasena.pemandoo.database.AddLandmarkActivity
-import com.nawasena.pemandoo.database.MapsRepository
-import com.nawasena.pemandoo.database.MapsViewModel
-import com.nawasena.pemandoo.database.MapsViewModelFactory
 import com.nawasena.pemandoo.databinding.FragmentNavigationBinding
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.nawasena.pemandoo.util.AppPreferences
+import com.nawasena.pemandoo.util.DistanceUtils
+import com.nawasena.pemandoo.util.LandmarkPhotoLoader
+import com.nawasena.pemandoo.viewmodel.LandmarkViewModel
 
 class NavigationFragment : Fragment() {
+
     private var _binding: FragmentNavigationBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var userLocation: Location? = null
-    private lateinit var locationCallback: LocationCallback
-
-    private lateinit var viewModel: MapsViewModel
-
-    private val geofenceRadius = 100f
-    private var geofenceLocations: List<LatLng> = emptyList()
+    private lateinit var viewModel: LandmarkViewModel
+    private var selectedLandmark: Landmark? = null
+    private var selectedId: String? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNavigationBinding.inflate(inflater, container, false)
@@ -61,42 +41,50 @@ class NavigationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        viewModel = ViewModelProvider(requireActivity())[LandmarkViewModel::class.java]
+        selectedId = arguments?.getString("landmarkId")
+            ?: AppPreferences.getLastLandmarkId(requireContext())
 
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-                locationResult.lastLocation?.let { newLocation ->
-                    userLocation = newLocation
-                    checkGeofenceStatus()
+        viewModel.landmarks.observe(viewLifecycleOwner) { landmarks ->
+            val location = viewModel.currentLocation.value
+            val target = landmarks.firstOrNull { it.id == selectedId }
+                ?: location?.let { userLocation ->
+                    landmarks.minByOrNull {
+                        it.distanceTo(userLocation.latitude, userLocation.longitude)
+                    }
                 }
+                ?: landmarks.firstOrNull()
+
+            if (target != null) {
+                selectedId = target.id
+                selectedLandmark = target
+                AppPreferences.setLastLandmarkId(requireContext(), target.id)
+                bindLandmark(target)
+            } else {
+                selectedLandmark = null
+                bindEmptyState()
             }
         }
 
-        val repository = MapsRepository(ApiConfig.apiService)
-        viewModel =
-            ViewModelProvider(this, MapsViewModelFactory(repository))[MapsViewModel::class.java]
-
-        if (ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_LOCATION_PERMISSION
-            )
-        } else {
-            requestLocation()
+        viewModel.currentLocation.observe(viewLifecycleOwner) {
+            selectedLandmark?.let(::updateDistance)
         }
 
-        lifecycleScope.launch {
-            val sharedPreferences =
-                requireContext().getSharedPreferences("LandmarkPrefs", Context.MODE_PRIVATE)
-            val landmarkId = sharedPreferences.getString("landmarkId", null)
+        binding.btnPlay.setOnClickListener {
+            selectedLandmark?.let { landmark ->
+                findNavController().navigate(
+                    R.id.action_navigationFragment_to_resultFragment,
+                    bundleOf("landmarkId" to landmark.id)
+                )
+            }
+        }
 
-            if (landmarkId != null) {
-                fetchLandmarkById(landmarkId)
+        binding.cvPlayDescription.setOnClickListener {
+            selectedLandmark?.let { landmark ->
+                findNavController().navigate(
+                    R.id.action_navigationFragment_to_detailFragment,
+                    bundleOf("landmarkId" to landmark.id)
+                )
             }
         }
 
@@ -113,119 +101,36 @@ class NavigationFragment : Fragment() {
         }
     }
 
+    private fun bindLandmark(landmark: Landmark) {
+        binding.tvLandmarkName.text = landmark.name
+        binding.tvLandmarkDescription.text = landmark.overview
+        LandmarkPhotoLoader.load(binding.ivLandmarkImage, landmark.photo)
+        updateDistance(landmark)
+    }
+
+    private fun updateDistance(landmark: Landmark) {
+        val distance = viewModel.currentLocation.value?.let { location ->
+            landmark.distanceTo(location.latitude, location.longitude)
+        }
+        binding.tvLandmarkRange.text = buildString {
+            append("Radius ${landmark.radiusMeters.toInt()} m")
+            if (distance != null) {
+                append(" · ")
+                append(DistanceUtils.formatDistanceShort(distance))
+            }
+        }
+    }
+
+    private fun bindEmptyState() {
+        binding.tvLandmarkName.text = getString(R.string.no_landmark_title)
+        binding.tvLandmarkDescription.text = getString(R.string.no_landmark_description)
+        binding.tvLandmarkRange.text = ""
+        LandmarkPhotoLoader.load(binding.ivLandmarkImage, null)
+        binding.btnPlay.isEnabled = false
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-    }
-
-    private fun requestLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            fusedLocationClient.requestLocationUpdates(
-                LocationRequest.create().apply {
-                    interval = 10000
-                    fastestInterval = 5000
-                    priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                },
-                locationCallback,
-                null
-            )
-        }
-    }
-
-  /*  private fun checkGeofenceStatus() {
-        val sharedPreferences =
-            requireContext().getSharedPreferences("LandmarkPrefs", Context.MODE_PRIVATE)
-        val landmarkId = sharedPreferences.getString("landmarkId", null)
-
-        // Periksa apakah userLocation dan geofenceLocations tidak null
-        val withinGeofence = userLocation != null && geofenceLocations.any { geofence ->
-            val distance = FloatArray(1)
-            Location.distanceBetween(
-                userLocation!!.latitude, userLocation!!.longitude,
-                geofence.latitude, geofence.longitude,
-                distance
-            )
-            distance[0] <= geofenceRadius
-        }
-
-        binding.btnPlay.isEnabled = withinGeofence
-        binding.btnPlay.visibility = if (withinGeofence) View.VISIBLE else View.GONE
-
-        if (withinGeofence) {
-            binding.btnPlay.setOnClickListener {
-                landmarkId?.let { id ->
-                    navigateToResultFragment(id)
-                }
-            }
-        } else {
-            binding.btnPlay.setOnClickListener(null)
-        }
-    }*/
-
-    private fun checkGeofenceStatus() {
-        val sharedPreferences =
-            requireContext().getSharedPreferences("LandmarkPrefs", Context.MODE_PRIVATE)
-        val landmarkId = sharedPreferences.getString("landmarkId", null)
-
-        // Tetapkan OnClickListener tanpa pengecekan tambahan
-        binding.btnPlay.setOnClickListener {
-            landmarkId?.let { id ->
-                navigateToResultFragment(id)
-            }
-        }
-    }
-
-
-
-    private fun fetchLandmarkById(landmarkId: String) {
-        val apiService = ApiConfig.apiService
-        val call = apiService.getLandmarkById(landmarkId)
-
-        call.enqueue(object : Callback<LandmarkResponseItem> {
-            override fun onResponse(
-                call: Call<LandmarkResponseItem>,
-                response: Response<LandmarkResponseItem>,
-            ) {
-                if (response.isSuccessful) {
-                    val landmark = response.body()
-                    if (landmark != null) {
-                        updateUI(landmark)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<LandmarkResponseItem>, t: Throwable) {
-                // Handle failure
-            }
-        })
-    }
-
-    private fun updateUI(landmark: LandmarkResponseItem) {
-        val binding = _binding
-
-        binding?.let {
-            Glide.with(requireContext())
-                .load(landmark.photo)
-                .into(it.ivLandmarkImage)
-            it.tvLandmarkName.text = landmark.name
-            it.tvLandmarkDescription.text = landmark.description?.overview ?: ""
-        }
-    }
-
-
-    private fun navigateToResultFragment(landmarkId: String) {
-        val actionId = R.id.action_navigationFragment_to_resultFragment
-        findNavController().navigate(actionId, Bundle().apply {
-            putString("landmarkId", landmarkId)
-        })
-    }
-
-    companion object {
-        private const val REQUEST_LOCATION_PERMISSION = 1
     }
 }

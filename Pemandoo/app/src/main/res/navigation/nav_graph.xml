@@ -18,30 +18,45 @@
         android:id="@+id/navigationFragment"
         android:name="com.nawasena.pemandoo.fragment.navigation.NavigationFragment"
         tools:layout="@layout/fragment_navigation">
+        <argument
+            android:name="landmarkId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/action_navigationFragment_to_resultFragment"
             app:destination="@id/resultFragment" />
+        <action
+            android:id="@+id/action_navigationFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/resultFragment"
         android:name="com.nawasena.pemandoo.fragment.result.ResultFragment"
         tools:layout="@layout/fragment_result">
+        <argument
+            android:name="landmarkId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/action_resultFragment_to_navigationFragment"
             app:destination="@id/navigationFragment" />
         <action
             android:id="@+id/action_resultFragment_to_detailLandmarkFragment"
-            app:destination="@id/detailFragment">
-            <argument
-                android:name="landmarkId"
-                app:argType="string" />
-        </action>
+            app:destination="@id/detailFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.nawasena.pemandoo.DetailLandmarkFragment"
-        tools:layout="@layout/fragment_detail_landmark"/>
+        tools:layout="@layout/fragment_detail_landmark">
+        <argument
+            android:name="landmarkId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
 </navigation>

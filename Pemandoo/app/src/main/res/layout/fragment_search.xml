@@ -4,136 +4,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/transparent"
     tools:context=".fragment.search.SearchFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_search_tour"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="@color/primary_yellow"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="8dp">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cv_search_tour_loading"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            app:cardCornerRadius="0dp"
-            app:cardElevation="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="18dp"
+            android:paddingBottom="14dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <TextView
+                android:id="@+id/tv_search_title"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/karla_bold"
+                android:text="@string/search_title"
+                android:textColor="@color/calm_black"
+                android:textSize="20sp" />
 
-                <ProgressBar
-                    android:id="@+id/loading_bar"
-                    android:layout_width="54dp"
-                    android:layout_height="54dp"
-                    app:indicatorColor="#2D2D2D"
-                    app:trackColor="#D9D9D9"
-                    android:layout_marginBottom="25dp"
-                    app:layout_constraintBottom_toTopOf="@id/tv_loading_text"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_loading_text"
-                    android:layout_width="match_parent"
-                    android:layout_marginHorizontal="24dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="-25dp"
-                    android:fontFamily="@font/karla_bold"
-                    android:text="Menemukan tempat wisata di sekitar, mohon tunggu ya.."
-                    android:textColor="@color/common_grey"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
-                    app:layout_constraintBottom_toTopOf="@id/iv_bottom_logo"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:ignore="TextSizeCheck" />
-
-                <ImageView
-                    android:id="@+id/iv_bottom_logo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/pemandoo_bottom_logo"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cv_search_tour"
-            android:layout_width="match_parent"
-            android:layout_height="179dp"
-            android:layout_marginBottom="194dp"
-            android:backgroundTint="@color/primary_yellow"
-            app:cardCornerRadius="30dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <TextView
+                android:id="@+id/tv_search_description"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/karla_regular"
+                android:text="@string/search_subtitle"
+                android:textColor="@color/calm_black"
+                android:textSize="13sp" />
 
-                <TextView
-                    android:id="@+id/tv_search_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="23dp"
-                    android:fontFamily="@font/karla_bold"
-                    android:text="Mulai Tur Audio wisatamu sekarang"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="166dp"
+                android:layout_marginTop="12dp">
 
-                <TextView
-                    android:id="@+id/tv_search_description1"
+                <LinearLayout
+                    android:id="@+id/loading_container"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="19dp"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/karla_regular"
-                    android:text="Dengarkan informasi terkait tempat-tempat wisata terdekat dari lokasimu saat ini hanya dengan satu klik. "
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_search_title" />
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_search_description2"
+                    <ProgressBar
+                        android:id="@+id/loading_bar"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:indeterminateTint="@color/primary_green"
+                        app:trackColor="#D9D9D9" />
+
+                    <TextView
+                        android:id="@+id/tv_loading_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/karla_bold"
+                        android:text="@string/search_loading"
+                        android:textAlignment="center"
+                        android:textColor="@color/text_color_grey"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_nearby"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="19dp"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/karla_regular"
-                    android:text="Mulailah dengan memilih tempat wisata yang tersedia pada daftar dibawah ini. "
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_search_description1" />
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingBottom="4dp"
+                    android:visibility="gone"
+                    tools:listitem="@layout/item_nearby_landmark" />
+            </FrameLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_search_start"
-                    android:layout_width="80dp"
-                    android:layout_height="30dp"
-                    android:layout_marginVertical="12dp"
-                    android:layout_marginEnd="23dp"
-                    android:backgroundTint="@color/primary_green"
-                    android:fontFamily="@font/karla_regular"
-                    android:padding="0dp"
-                    android:text="Mengerti"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="14dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_search_description2"
-                    tools:ignore="TextSizeCheck,TouchTargetSizeCheck" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_search_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/primary_green"
+                android:fontFamily="@font/karla_semibold"
+                android:minWidth="120dp"
+                android:text="@string/search_start"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:cornerRadius="22dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

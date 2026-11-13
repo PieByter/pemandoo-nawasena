@@ -8,8 +8,10 @@ import android.os.Looper
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.nawasena.pemandoo.R
 import com.nawasena.pemandoo.authentication.OnBoardingActivity
+import com.nawasena.pemandoo.database.MapsActivity
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
@@ -32,7 +34,12 @@ class SplashScreenActivity : AppCompatActivity() {
             .setDuration(1500)
             .withEndAction {
                 Handler(Looper.getMainLooper()).postDelayed({
-                    startActivity(Intent(this, OnBoardingActivity::class.java))
+                    val destination = if (FirebaseAuth.getInstance().currentUser != null) {
+                        MapsActivity::class.java
+                    } else {
+                        OnBoardingActivity::class.java
+                    }
+                    startActivity(Intent(this, destination))
                     finish()
                 }, 1000)
             }

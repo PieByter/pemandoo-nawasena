@@ -1,111 +1,142 @@
 package com.nawasena.pemandoo.database
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
 import com.nawasena.pemandoo.R
-import com.nawasena.pemandoo.api.ApiConfig
-import com.nawasena.pemandoo.api.LandmarkResponseItem
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.nawasena.pemandoo.data.PemandooDatabase
+import com.nawasena.pemandoo.util.AppPreferences
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
-    companion object {
-        private const val TAG = "GeofenceBroadcast"
-        const val ACTION_GEOFENCE_EVENT = "GeofenceEvent"
-        private const val CHANNEL_ID = "1"
-        private const val CHANNEL_NAME = "Geofence Channel"
-        private const val NOTIFICATION_ID = 1
-    }
-
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == ACTION_GEOFENCE_EVENT) {
-            val geofencingEvent = GeofencingEvent.fromIntent(intent) ?: return
+        val pendingResult = goAsync()
+        val appContext = context.applicationContext
 
-            if (geofencingEvent.hasError()) {
-                val errorMessage = GeofenceStatusCodes.getStatusCodeString(geofencingEvent.errorCode)
-                Log.e(TAG, errorMessage)
-                sendNotification(context, "Error: $errorMessage")
-                return
-            }
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val event = GeofencingEvent.fromIntent(intent) ?: return@launch
 
-            val geofenceTransition = geofencingEvent.geofenceTransition
-
-            if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
-                geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL) {
-                val triggeringGeofences = geofencingEvent.triggeringGeofences
-                triggeringGeofences?.forEach { geofence ->
-                    val geofenceId = geofence.requestId
-                    fetchLandmarkDetails(geofenceId, geofenceTransition, context)
+                if (event.hasError()) {
+                    val message = GeofenceStatusCodes.getStatusCodeString(event.errorCode)
+                    Log.e(TAG, "Geofence error: $message")
+                    return@launch
                 }
-            }
-        }
-    }
 
-    private fun fetchLandmarkDetails(geofenceId: String, transitionType: Int, context: Context) {
-        val apiService = ApiConfig.apiService
-        val call = apiService.getLandmarkById(geofenceId)
+                val transition = event.geofenceTransition
+                if (transition != Geofence.GEOFENCE_TRANSITION_ENTER &&
+                    transition != Geofence.GEOFENCE_TRANSITION_DWELL
+                ) {
+                    return@launch
+                }
 
-        call.enqueue(object : Callback<LandmarkResponseItem> {
-            override fun onResponse(
-                call: Call<LandmarkResponseItem>,
-                response: Response<LandmarkResponseItem>
-            ) {
-                if (response.isSuccessful) {
-                    val landmark = response.body()
+                event.triggeringGeofences.orEmpty().forEach { geofence ->
+                    val landmark = PemandooDatabase.get(appContext)
+                        .landmarkDao()
+                        .getById(geofence.requestId)
+
                     if (landmark != null) {
-                        saveLandmarkToSharedPreferences(context, landmark)
-                        sendNotification(context, "Entered: ${landmark.name}")
+                        AppPreferences.setLastLandmarkId(appContext, landmark.id)
+                        showNotification(
+                            context = appContext,
+                            title = "Kamu tiba di ${landmark.name}",
+                            message = "Ketuk untuk memulai tur audio tempat wisata ini.",
+                            landmarkId = landmark.id
+                        )
+                    } else {
+                        Log.w(TAG, "Landmark ${geofence.requestId} tidak ditemukan")
                     }
-                } else {
-                    sendNotification(context, "Failed to fetch landmark details")
                 }
+            } catch (exception: Exception) {
+                Log.e(TAG, "Gagal memproses geofence", exception)
+            } finally {
+                pendingResult.finish()
             }
-
-            override fun onFailure(call: Call<LandmarkResponseItem>, t: Throwable) {
-                sendNotification(context, "Error: ${t.message}")
-            }
-        })
-    }
-
-    private fun saveLandmarkToSharedPreferences(context: Context, landmark: LandmarkResponseItem) {
-        val sharedPreferences = context.getSharedPreferences("LandmarkPrefs", Context.MODE_PRIVATE)
-
-        with(sharedPreferences.edit()) {
-            putString("landmarkId", landmark.id)
-            putString("landmarkName", landmark.name)
-            apply()
         }
     }
 
-    private fun sendNotification(context: Context, message: String) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
-            notificationManager.createNotificationChannel(channel)
+    private fun showNotification(
+        context: Context,
+        title: String,
+        message: String,
+        landmarkId: String
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
         }
+
+        createNotificationChannel(context)
+
+        val intent = Intent(context, MapsActivity::class.java).apply {
+            putExtra(EXTRA_LANDMARK_ID, landmarkId)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        val contentIntent = PendingIntent.getActivity(
+            context,
+            landmarkId.hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Geofence Notification")
+            .setSmallIcon(R.drawable.ic_baseline_notifications_active_24)
+            .setContentTitle(title)
             .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .setContentIntent(contentIntent)
             .build()
 
-        notificationManager.notify(NOTIFICATION_ID, notification)
+        try {
+            NotificationManagerCompat.from(context).notify(
+                (landmarkId.hashCode() and 0x7FFFFFFF).takeIf { it != 0 } ?: NOTIFICATION_ID,
+                notification
+            )
+        } catch (exception: SecurityException) {
+            Log.e(TAG, "Tidak dapat menampilkan notifikasi", exception)
+        }
+    }
+
+    private fun createNotificationChannel(context: Context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            "Tur Audio Pemandoo",
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            description = "Pemberitahuan saat kamu berada di dekat tempat wisata"
+        }
+        manager.createNotificationChannel(channel)
+    }
+
+    companion object {
+        private const val TAG = "GeofenceBroadcast"
+        private const val CHANNEL_ID = "pemandoo_geofence_v1"
+        private const val NOTIFICATION_ID = 1001
+        const val ACTION_GEOFENCE_EVENT = "com.nawasena.pemandoo.GEOFENCE_EVENT"
+        const val EXTRA_LANDMARK_ID = "landmark_id"
     }
 }
